@@ -14,7 +14,7 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
       detail: 'Everything in one place',
     },
     {
-      label: 'In progress',
+      label: 'Pending',
       value: statistics?.pending,
       icon: CircleDashed,
       tone: 'amber',

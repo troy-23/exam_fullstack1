@@ -173,7 +173,7 @@ h2 {
 }
 .priority-badge.low {
   background: #edf3fc;
-  color: #5078b4;
+  color: #3e649b;
 }
 .task-description {
   color: #607089;
@@ -202,7 +202,7 @@ h2 {
   color: #80612c;
 }
 .status-label.completed {
-  color: #39866c;
+  color: #2b755c;
 }
 .status-dot {
   height: 4px;

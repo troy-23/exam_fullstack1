@@ -36,7 +36,7 @@ export function TaskForm({ onCreate }: Props) {
       setTitle('');
       setDescription('');
       setPriority('medium');
-      titleRef.current?.focus();
+      requestAnimationFrame(() => titleRef.current?.focus());
     } catch (failure) {
       const apiError =
         failure instanceof ApiError
@@ -44,7 +44,7 @@ export function TaskForm({ onCreate }: Props) {
           : new ApiError('Your task couldn’t be saved. Please try again.');
       setErrors(apiError.fields);
       setError(apiError.message);
-      if (apiError.fields.title) titleRef.current?.focus();
+      if (apiError.fields.title) requestAnimationFrame(() => titleRef.current?.focus());
     } finally {
       inFlight.current = false;
       setSubmitting(false);

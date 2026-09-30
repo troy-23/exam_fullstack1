@@ -74,7 +74,6 @@ export default function App() {
       setDeleteTarget(null);
       setNotice('Task deleted. Room for what’s next.');
       refresh();
-      document.getElementById('task-list-heading')?.focus();
     } catch (failure) {
       setDeleteError(
         failure instanceof Error ? failure.message : 'The task couldn’t be deleted. Try again.',

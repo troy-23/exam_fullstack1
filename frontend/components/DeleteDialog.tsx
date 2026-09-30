@@ -22,7 +22,12 @@ export function DeleteDialog({ task, deleting, error, onCancel, onConfirm }: Pro
     cancelRef.current?.focus();
     return () => {
       dialog?.close();
-      previousFocus?.focus();
+      requestAnimationFrame(() => {
+        const target = previousFocus?.isConnected
+          ? previousFocus
+          : document.getElementById('task-list-heading');
+        target?.focus();
+      });
     };
   }, []);
 
