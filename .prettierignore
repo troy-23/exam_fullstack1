@@ -1,0 +1,10 @@
+node_modules
+vendor
+.tools
+public/build
+research
+artifacts
+test-results
+playwright-report
+composer.lock
+package-lock.json
