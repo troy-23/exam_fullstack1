@@ -1,0 +1,12 @@
+/vendor/
+/node_modules/
+/public/build/
+/.tools/
+/.env
+/.phpunit.cache/
+/test-results/
+/playwright-report/
+/artifacts/
+/research/
+*.log
+.DS_Store
