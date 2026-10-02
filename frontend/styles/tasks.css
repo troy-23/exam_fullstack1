@@ -2,38 +2,14 @@
   container-type: inline-size;
 }
 .list-heading {
-  padding: 24px 20px 20px;
+  padding: var(--space-6) var(--space-5) var(--space-4);
   display: flex;
   justify-content: space-between;
   align-items: start;
   gap: var(--space-3);
 }
-.heading-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  min-height: 24px;
-  padding: 0 8px;
-  color: var(--blue);
-  background: var(--blue-soft);
-  font-size: var(--text-xs);
-  font-variant-numeric: tabular-nums;
-  margin-left: 8px;
-  border-radius: 6px;
-  vertical-align: middle;
-}
-.sort-label {
-  display: none;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--muted);
-  font-size: var(--text-xs);
-  white-space: nowrap;
-  margin-top: 4px;
-}
 .list-toolbar {
-  padding: 0 16px 20px;
+  padding: 0 var(--space-5) var(--space-4);
   border-bottom: 1px solid var(--line);
 }
 .filters {
@@ -45,7 +21,7 @@
   padding: 8px 12px;
   min-height: 44px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   font-size: var(--text-sm);
   color: var(--muted);
   background: var(--surface);
@@ -174,7 +150,7 @@
   gap: var(--space-2);
   margin-top: 12px;
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
 }
 .status-label {
   display: flex;
@@ -201,12 +177,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  max-width: 16rem;
 }
 .complete-button,
 .delete-button {
   min-height: 44px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--surface);
   padding: 10px 12px;
   display: flex;
@@ -241,7 +218,7 @@
   display: grid;
   place-items: center;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   padding: 0;
   color: var(--muted);
   background: transparent;
@@ -270,25 +247,24 @@
     gap: var(--space-6);
     padding: 24px;
   }
-  .sort-label {
-    display: flex;
-  }
   .list-heading {
     padding-inline: 24px;
   }
   .list-toolbar,
-  .list-footer {
+  .list-footer,
+  .loading-state,
+  .refresh-error {
     padding-inline: 24px;
   }
 }
 @container (max-width: 400px) {
   .filters {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 5rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.75rem), 1fr));
   }
   .filter {
     flex-direction: column;
-    padding: 8px 4px;
+    padding: 8px 2px;
     gap: 4px;
     font-size: 0.8125rem;
   }

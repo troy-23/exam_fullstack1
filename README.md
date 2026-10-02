@@ -46,7 +46,7 @@ Optional: after `composer db:setup`, run `composer db:seed` to add the 12 sample
 
 - **Tools:** ChatGPT, Astra, and OpenAI Codex.
 - **Scope:** AI generated or assisted with much of the PHP sorter/API, database schema and seed scripts, React UI/CSS, tests, configuration, and documentation.
-- **Reviews and fixes:** AI-assisted work included fixes for dependency compatibility, validation, contrast, keyboard focus, responsive layouts, and the test environment. Checks included PHPUnit, PSR-12, TypeScript, linting, and API/browser tests. The UI and documentation were also simplified.
+- **Reviews and fixes:** AI-assisted work included fixes for dependency compatibility, validation, contrast, keyboard focus, responsive layouts, and the test environment. A final UI audit improved spacing, component consistency, inline feedback, and list refresh behavior. Checks included PHPUnit, PSR-12, TypeScript, linting, and API/browser tests. The UI and documentation were also simplified.
 
 These reviews and checks were AI-assisted. No completed personal code review by the candidate is claimed.
 

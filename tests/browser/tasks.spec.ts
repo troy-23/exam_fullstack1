@@ -66,6 +66,8 @@ test('keeps form input after a failed save and can recover from a failed list re
   await page.getByRole('button', { name: 'Add task', exact: true }).click();
   await expect(page.getByLabel('Task title')).toHaveValue('Keep this draft');
   await expect(page.locator('.form-error')).toBeVisible();
+  await expect(page.locator('.form-error')).toBeFocused();
+  await expect(page.locator('.form-error')).toBeInViewport();
   await page.unroute('**/api/tasks**');
   await page.getByRole('button', { name: 'Retry', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Unable to load tasks' })).not.toBeVisible();

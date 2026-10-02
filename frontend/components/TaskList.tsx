@@ -1,5 +1,4 @@
 import {
-  ArrowDownWideNarrow,
   Check,
   CheckCheck,
   CircleAlert,
@@ -8,8 +7,9 @@ import {
   Plus,
   RotateCw,
   Trash2,
+  X,
 } from 'lucide-react';
-import type { Filter, Statistics, Task } from '../types';
+import type { Filter, Statistics, Task, TaskActionError } from '../types';
 
 interface Props {
   tasks: Task[];
@@ -17,7 +17,11 @@ interface Props {
   filter: Filter;
   onFilter: (filter: Filter) => void;
   loading: boolean;
+  refreshing: boolean;
   error: string | null;
+  refreshError: string | null;
+  actionError: TaskActionError | null;
+  onDismissError: () => void;
   busyId: number | null;
   onComplete: (task: Task) => void;
   onDelete: (task: Task) => void;
@@ -39,7 +43,11 @@ export function TaskList(props: Props) {
     filter,
     onFilter,
     loading,
+    refreshing,
     error,
+    refreshError,
+    actionError,
+    onDismissError,
     busyId,
     onComplete,
     onDelete,
@@ -56,15 +64,9 @@ export function TaskList(props: Props) {
   return (
     <section className="panel task-list-panel" aria-labelledby="task-list-heading">
       <div className="list-heading">
-        <div>
-          <h2 id="task-list-heading" tabIndex={-1}>
-            Your tasks <span className="heading-count">{statistics?.total ?? '—'}</span>
-          </h2>
-        </div>
-        <span className="sort-label">
-          <ArrowDownWideNarrow size={15} aria-hidden="true" />
-          Priority first
-        </span>
+        <h2 id="task-list-heading" tabIndex={-1}>
+          Your tasks
+        </h2>
       </div>
       <div className="list-toolbar">
         <div className="filters" role="group" aria-label="Filter tasks by status">
@@ -82,13 +84,13 @@ export function TaskList(props: Props) {
           ))}
         </div>
       </div>
-      <div className="task-list-content" aria-busy={loading}>
+      <div className="task-list-content" aria-busy={loading || refreshing}>
         {loading ? (
           <div className="loading-state" role="status" aria-label="Loading tasks">
             {[1, 2, 3, 4].map((value) => (
               <div className="task-skeleton" key={value}>
-                <span />
                 <div>
+                  <span />
                   <span />
                   <span />
                 </div>
@@ -132,7 +134,9 @@ export function TaskList(props: Props) {
               <li key={task.id} className={`task-row ${task.status}`} data-testid="task-row">
                 <div className="task-content">
                   <div className="task-title-line">
-                    <h3>{task.title}</h3>
+                    <h3 id={`task-heading-${task.id}`} tabIndex={-1}>
+                      {task.title}
+                    </h3>
                     <span className={`priority-badge ${task.priority}`}>
                       <span aria-hidden="true" />
                       {task.priority}
@@ -142,7 +146,7 @@ export function TaskList(props: Props) {
                   <div className="task-meta">
                     <span className={`status-label ${task.status}`}>
                       {task.status === 'completed' ? (
-                        <CheckCheck size={13} aria-hidden="true" />
+                        <CheckCheck size={14} aria-hidden="true" />
                       ) : (
                         <span className="status-dot" aria-hidden="true" />
                       )}
@@ -159,15 +163,19 @@ export function TaskList(props: Props) {
                 <div className="task-actions">
                   {task.status === 'pending' && (
                     <button
+                      id={`task-complete-${task.id}`}
                       className="complete-button"
                       aria-label={`Complete ${task.title}`}
+                      aria-describedby={
+                        actionError?.taskId === task.id ? `task-error-${task.id}` : undefined
+                      }
                       disabled={busyId !== null}
                       onClick={() => onComplete(task)}
                     >
                       {busyId === task.id ? (
-                        <LoaderCircle size={15} className="spin" aria-hidden="true" />
+                        <LoaderCircle size={16} className="spin" aria-hidden="true" />
                       ) : (
-                        <Check size={15} aria-hidden="true" />
+                        <Check size={16} aria-hidden="true" />
                       )}
                       <span>Complete</span>
                     </button>
@@ -181,16 +189,39 @@ export function TaskList(props: Props) {
                     <Trash2 size={16} aria-hidden="true" />
                     <span>Delete</span>
                   </button>
+                  {actionError?.taskId === task.id && (
+                    <div className="action-error" role="alert" id={`task-error-${task.id}`}>
+                      <p>{actionError.message}</p>
+                      <button
+                        className="icon-button"
+                        aria-label="Dismiss task error"
+                        onClick={onDismissError}
+                      >
+                        <X size={16} aria-hidden="true" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
           </ul>
         )}
       </div>
+      {refreshError && (
+        <div className="refresh-error" role="alert">
+          <p>{refreshError} Showing the last loaded tasks.</p>
+          <button className="button secondary" onClick={onRetry}>
+            <RotateCw size={16} aria-hidden="true" />
+            Retry
+          </button>
+        </div>
+      )}
       <div className="list-footer">
         <span>
-          {loading
-            ? 'Loading tasks…'
+          {loading || refreshing
+            ? refreshing
+              ? 'Updating tasks…'
+              : 'Loading tasks…'
             : error
               ? 'Check your connection and retry.'
               : `Showing ${tasks.length} ${filter === 'all' ? '' : `${filter} `}task${tasks.length === 1 ? '' : 's'}`}

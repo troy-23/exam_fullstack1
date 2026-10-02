@@ -1,10 +1,10 @@
-import { Flag, LoaderCircle, Plus } from 'lucide-react';
+import { Check, LoaderCircle, Plus } from 'lucide-react';
 import { useRef, useState, type FormEvent } from 'react';
 import { ApiError } from '../api';
 import type { Priority, TaskInput } from '../types';
 
 interface Props {
-  onCreate: (task: TaskInput) => Promise<void>;
+  onCreate: (task: TaskInput) => Promise<string>;
 }
 
 export function TaskForm({ onCreate }: Props) {
@@ -14,13 +14,16 @@ export function TaskForm({ onCreate }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const titleRef = useRef<HTMLInputElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
   const inFlight = useRef(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (inFlight.current) return;
     setError('');
+    setSuccess('');
     setErrors({});
 
     if (!title.trim()) {
@@ -32,7 +35,12 @@ export function TaskForm({ onCreate }: Props) {
     inFlight.current = true;
     setSubmitting(true);
     try {
-      await onCreate({ title: title.trim(), description: description.trim(), priority });
+      const message = await onCreate({
+        title: title.trim(),
+        description: description.trim(),
+        priority,
+      });
+      setSuccess(message);
       setTitle('');
       setDescription('');
       setPriority('medium');
@@ -44,7 +52,12 @@ export function TaskForm({ onCreate }: Props) {
           : new ApiError('Your task couldn’t be saved. Please try again.');
       setErrors(apiError.fields);
       setError(apiError.message);
-      if (apiError.fields.title) requestAnimationFrame(() => titleRef.current?.focus());
+      requestAnimationFrame(() => {
+        if (document.activeElement === document.body) {
+          if (apiError.fields.title) titleRef.current?.focus();
+          else errorRef.current?.focus();
+        }
+      });
     } finally {
       inFlight.current = false;
       setSubmitting(false);
@@ -57,7 +70,20 @@ export function TaskForm({ onCreate }: Props) {
         <div className="form-heading">
           <h2 id="new-task-heading">Add task</h2>
         </div>
+        <div role="status" aria-live="polite" aria-atomic="true">
+          {success && (
+            <p className="form-notice">
+              <Check size={18} aria-hidden="true" />
+              <span>{success}</span>
+            </p>
+          )}
+        </div>
         <form onSubmit={submit} noValidate>
+          {error && (
+            <p ref={errorRef} className="form-error submit-error" role="alert" tabIndex={-1}>
+              {error}
+            </p>
+          )}
           <fieldset disabled={submitting} className="form-fields">
             <div className="field">
               <label htmlFor="task-title">
@@ -119,7 +145,7 @@ export function TaskForm({ onCreate }: Props) {
                       onChange={() => setPriority(value)}
                     />
                     <span>
-                      <Flag size={14} aria-hidden="true" />
+                      <Check size={14} aria-hidden="true" />
                       {value}
                     </span>
                   </label>
@@ -140,11 +166,6 @@ export function TaskForm({ onCreate }: Props) {
               {submitting ? 'Adding task…' : 'Add task'}
             </button>
           </fieldset>
-          {error && (
-            <p className="form-error" role="alert">
-              {error}
-            </p>
-          )}
         </form>
       </section>
     </aside>

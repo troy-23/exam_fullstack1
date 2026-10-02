@@ -18,7 +18,7 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
           <strong className="stat-value">{value ?? '—'}</strong>
         </div>
       ))}
-      <div className="stat-card progress-card">
+      <div className="stat-card">
         <span className="stat-top">Completion rate</span>
         <strong className="stat-value">
           {statistics ? percentage : '—'}

@@ -78,14 +78,16 @@ button:active:not(:disabled) {
 .statistics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
-  gap: var(--space-3);
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+  overflow: hidden;
   margin-bottom: 24px;
 }
 .stat-card {
-  padding: 16px;
-  border: 1px solid var(--line);
+  padding: var(--space-4);
   background: var(--surface);
-  border-radius: var(--radius);
   min-width: 0;
 }
 .stat-top {
@@ -95,7 +97,7 @@ button:active:not(:disabled) {
   font-weight: 600;
 }
 .stat-value {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
   display: block;
@@ -108,14 +110,11 @@ button:active:not(:disabled) {
   font-weight: 500;
   margin-left: 4px;
 }
-.progress-card {
-  background: var(--blue-soft);
-}
 .progress-track {
   height: 6px;
   background: #c9d7ef;
   border-radius: 6px;
-  margin-top: 12px;
+  margin-top: var(--space-2);
   overflow: hidden;
 }
 .progress-track > span {

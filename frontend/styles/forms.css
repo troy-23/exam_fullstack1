@@ -96,9 +96,9 @@ textarea:focus {
   gap: 6px;
   border: 1px solid var(--control-border);
   min-height: 44px;
-  padding: 10px 8px;
-  border-radius: 8px;
-  font-size: var(--text-xs);
+  padding: 10px 4px;
+  border-radius: var(--radius-control);
+  font-size: var(--text-sm);
   text-transform: capitalize;
   color: var(--text);
   font-weight: 650;
@@ -109,6 +109,12 @@ textarea:focus {
 .priority-option input:focus-visible + span {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
+}
+.priority-option svg {
+  visibility: hidden;
+}
+.priority-option input:checked + span > svg {
+  visibility: visible;
 }
 .priority-option.medium input:checked + span {
   border-color: var(--warning);
@@ -150,7 +156,7 @@ textarea:focus {
 }
 .form-error {
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: var(--danger-soft);
   color: var(--danger);
   font-size: var(--text-sm);

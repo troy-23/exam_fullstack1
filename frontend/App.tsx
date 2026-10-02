@@ -1,34 +1,59 @@
-import { CircleCheck, Plus, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Plus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { tasksApi } from './api';
 import { DeleteDialog } from './components/DeleteDialog';
 import { Statistics } from './components/Statistics';
 import { TaskForm } from './components/TaskForm';
 import { TaskList } from './components/TaskList';
-import type { Filter, Task, TaskInput } from './types';
+import type { Filter, Task, TaskActionError, TaskInput } from './types';
 import { useTasks } from './useTasks';
 
 export default function App() {
   const [filter, setFilter] = useState<Filter>('all');
-  const { result, loading, error, refresh } = useTasks(filter);
+  const { result, loading, refreshing, error, refreshError, refresh } = useTasks(filter);
   const [notice, setNotice] = useState('');
-  const [actionError, setActionError] = useState('');
+  const [actionError, setActionError] = useState<TaskActionError | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Task | null>(null);
   const [deleteError, setDeleteError] = useState('');
   const mutationLock = useRef(false);
+  const actionFocus = useRef<{ id: number; action: 'complete' | 'delete' } | null>(null);
+
+  useEffect(() => {
+    const focus = actionFocus.current;
+    if (!focus || !result) return;
+    const task = result.data.find((task) => task.id === focus.id);
+    if (focus.action === 'delete' ? task !== undefined : task?.status === 'pending') return;
+
+    actionFocus.current = null;
+    if (document.activeElement === document.body) {
+      const target =
+        (focus.action === 'complete' && document.getElementById(`task-heading-${focus.id}`)) ||
+        document.getElementById('task-list-heading');
+      target?.focus();
+    }
+  }, [result]);
 
   function focusForm() {
     document.getElementById('task-title')?.focus();
   }
 
+  function dismissTaskError() {
+    if (actionError) {
+      document
+        .getElementById(`task-complete-${actionError.taskId}`)
+        ?.focus({ preventScroll: true });
+    }
+    setActionError(null);
+  }
+
   async function createTask(input: TaskInput) {
     setNotice('');
     await tasksApi.create(input);
-    setNotice(
-      filter === 'completed' ? 'Task added. View it under All tasks or Pending.' : 'Task added.',
-    );
     refresh();
+    return filter === 'completed'
+      ? 'Task added. View it under All tasks or Pending.'
+      : 'Task added.';
   }
 
   async function completeTask(task: Task) {
@@ -36,15 +61,24 @@ export default function App() {
     mutationLock.current = true;
     setBusyId(task.id);
     setNotice('');
-    setActionError('');
+    setActionError(null);
     try {
       await tasksApi.complete(task.id);
       setNotice('Task completed.');
+      actionFocus.current = { id: task.id, action: 'complete' };
       refresh();
     } catch (failure) {
-      setActionError(
-        failure instanceof Error ? failure.message : 'Unable to complete the task. Try again.',
-      );
+      setActionError({
+        taskId: task.id,
+        message:
+          failure instanceof Error ? failure.message : 'Unable to complete the task. Try again.',
+      });
+      requestAnimationFrame(() => {
+        if (document.activeElement === document.body) {
+          document.getElementById(`task-error-${task.id}`)?.scrollIntoView({ block: 'nearest' });
+          document.getElementById(`task-complete-${task.id}`)?.focus({ preventScroll: true });
+        }
+      });
     } finally {
       mutationLock.current = false;
       setBusyId(null);
@@ -59,6 +93,7 @@ export default function App() {
     setDeleteError('');
     try {
       await tasksApi.delete(deleteTarget.id);
+      actionFocus.current = { id: deleteTarget.id, action: 'delete' };
       setDeleteTarget(null);
       setNotice('Task deleted.');
       refresh();
@@ -89,42 +124,22 @@ export default function App() {
           </button>
         </header>
         <Statistics statistics={result?.statistics} />
-        <div className="toast-region" role="status" aria-live="polite" aria-atomic="true">
-          {notice && (
-            <div className="toast">
-              <CircleCheck size={20} aria-hidden="true" />
-              <span>{notice}</span>
-              <button
-                className="icon-button"
-                aria-label="Dismiss notification"
-                onClick={() => setNotice('')}
-              >
-                <X size={18} aria-hidden="true" />
-              </button>
-            </div>
-          )}
+        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          {notice}
         </div>
         <div className="workspace-grid">
           <div className="list-column">
-            {actionError && (
-              <div className="action-error" role="alert">
-                <p>{actionError}</p>
-                <button
-                  className="icon-button"
-                  aria-label="Dismiss error"
-                  onClick={() => setActionError('')}
-                >
-                  <X size={16} aria-hidden="true" />
-                </button>
-              </div>
-            )}
             <TaskList
               tasks={result?.data ?? []}
               statistics={result?.statistics}
               filter={filter}
               onFilter={setFilter}
               loading={loading}
+              refreshing={refreshing}
               error={error}
+              refreshError={refreshError}
+              actionError={actionError}
+              onDismissError={dismissTaskError}
               busyId={busyId}
               onComplete={completeTask}
               onDelete={(task) => {

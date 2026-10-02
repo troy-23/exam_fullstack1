@@ -2,6 +2,11 @@ export type Priority = 'low' | 'medium' | 'high';
 export type Status = 'pending' | 'completed';
 export type Filter = 'all' | Status;
 
+export interface TaskActionError {
+  taskId: number;
+  message: string;
+}
+
 export interface Task {
   id: number;
   title: string;

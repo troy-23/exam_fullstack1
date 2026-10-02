@@ -25,7 +25,7 @@
   --danger-soft: #fff0f1;
   --focus: #2459b8;
   --radius: 16px;
-  --radius-control: 10px;
+  --radius-control: 8px;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -33,6 +33,7 @@
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
   --motion-fast: 140ms;
