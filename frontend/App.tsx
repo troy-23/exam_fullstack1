@@ -1,13 +1,4 @@
-import {
-  ArrowUpRight,
-  Check,
-  CircleCheck,
-  LayoutDashboard,
-  ListTodo,
-  Plus,
-  Sparkles,
-  X,
-} from 'lucide-react';
+import { CalendarDays, Check, CircleCheck, LayoutDashboard, Plus, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { tasksApi } from './api';
 import { Brand } from './components/Brand';
@@ -112,20 +103,20 @@ export default function App() {
               <span className="art-check">
                 <Check size={30} strokeWidth={3} />
               </span>
-              <span className="art-star">✦</span>
               <span className="art-dot" />
             </div>
             <h2>
               Small steps.
               <br />
-              Good things.
+              Big progress.
             </h2>
             <p>
-              A little more clarity.
-              <br />A little more done.
+              Start with one task.
+              <br />
+              Build from there.
             </p>
             <div className="sidebar-divider" />
-            <span className="sidebar-signoff">Made for your everyday.</span>
+            <span className="sidebar-signoff">A little more done, every day.</span>
           </div>
         </aside>
         <div className="main-shell">
@@ -135,17 +126,12 @@ export default function App() {
             </div>
             <div className="breadcrumb">
               <LayoutDashboard size={16} aria-hidden="true" />
-              <span>Workspace</span>
-              <span className="breadcrumb-slash">/</span>
-              <strong>Overview</strong>
+              <strong>Your workspace</strong>
             </div>
             <div className="topbar-right">
               <span className="today-label">
-                <span />
+                <CalendarDays size={16} aria-hidden="true" />
                 {date}
-              </span>
-              <span className="profile-mark" aria-label="Personal workspace">
-                S
               </span>
             </div>
           </header>
@@ -153,29 +139,34 @@ export default function App() {
             <section className="page-heading">
               <div>
                 <div className="eyebrow">
-                  <span />A LITTLE FOCUS GOES A LONG WAY
+                  <span />A FRESH PERSPECTIVE ON YOUR DAY
                 </div>
                 <h1>
                   Make room for <span>progress.</span>
                 </h1>
-                <p>Your tasks, a clearer head, and a good place to start.</p>
+                <p>Plan your day. Set your priorities. Take the next step.</p>
               </div>
               <button className="button primary new-task-shortcut" onClick={focusForm}>
                 <Plus size={18} aria-hidden="true" />
                 New task
               </button>
             </section>
-            <Statistics statistics={result?.statistics} />
-            <div className="section-intro">
-              <span>
-                <ListTodo size={17} aria-hidden="true" />
-                Let’s get a little more done.
-              </span>
-              <span className="intro-detail">
-                <Sparkles size={14} aria-hidden="true" />
-                Your pace. Your progress.
-              </span>
+            <div className="toast-region" role="status" aria-live="polite" aria-atomic="true">
+              {notice && (
+                <div className="toast">
+                  <CircleCheck size={20} aria-hidden="true" />
+                  <span>{notice}</span>
+                  <button
+                    className="icon-button"
+                    aria-label="Dismiss notification"
+                    onClick={() => setNotice('')}
+                  >
+                    <X size={18} aria-hidden="true" />
+                  </button>
+                </div>
+              )}
             </div>
+            <Statistics statistics={result?.statistics} />
             <div className="workspace-grid">
               <div className="list-column">
                 {actionError && (
@@ -206,35 +197,15 @@ export default function App() {
                   onRetry={refresh}
                   onNewTask={focusForm}
                 />
-                <div className="list-note">
-                  <CircleCheck size={15} aria-hidden="true" />
-                  <span>Less juggling. More doing.</span>
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </div>
               </div>
               <TaskForm onCreate={createTask} />
             </div>
             <footer className="page-footer">
               <span>Simple Task Tracker</span>
-              <span>A little more done. A little more you.</span>
+              <span>Small steps. Steady progress.</span>
             </footer>
           </main>
         </div>
-      </div>
-      <div className="toast-region" role="status" aria-live="polite" aria-atomic="true">
-        {notice && (
-          <div className="toast">
-            <CircleCheck size={19} aria-hidden="true" />
-            <span>{notice}</span>
-            <button
-              className="icon-button"
-              aria-label="Dismiss notification"
-              onClick={() => setNotice('')}
-            >
-              <X size={16} aria-hidden="true" />
-            </button>
-          </div>
-        )}
       </div>
       {deleteTarget && (
         <DeleteDialog

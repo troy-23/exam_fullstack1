@@ -11,21 +11,21 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
       value: statistics?.total,
       icon: Layers3,
       tone: 'blue',
-      detail: 'Everything in one place',
+      detail: 'In your workspace',
     },
     {
       label: 'Pending',
       value: statistics?.pending,
       icon: CircleDashed,
       tone: 'amber',
-      detail: 'One step at a time',
+      detail: 'Ready when you are',
     },
     {
       label: 'Completed',
       value: statistics?.completed,
       icon: CheckCheck,
       tone: 'green',
-      detail: 'Look at you go',
+      detail: 'One step further',
     },
   ];
 
@@ -56,13 +56,17 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
           className="progress-track"
           role="progressbar"
           aria-label="Tasks completed"
-          aria-valuenow={percentage}
+          aria-valuenow={statistics ? percentage : undefined}
           aria-valuemin={0}
           aria-valuemax={100}
         >
-          <span style={{ width: `${percentage}%` }} />
+          <span style={{ transform: `scaleX(${percentage / 100})` }} />
         </div>
-        <span className="stat-detail">A little progress adds up.</span>
+        <span className="stat-detail">
+          {statistics
+            ? `${statistics.completed} of ${statistics.total} tasks done`
+            : 'Loading your progress…'}
+        </span>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 The user story is: create a task in React, persist it through PHP in MySQL, reload and filter it, complete it, then confirm deletion and see updated statistics.
 
-Local result: **6 PHPUnit tests (14 assertions) and 14 Playwright tests passed**. Type checking, linting, formatting, and the production build also passed. The three sorter tests live in the exact path requested by the brief.
+Local result: **6 PHPUnit tests (14 assertions) and 15 Playwright tests passed**. Type checking, linting, formatting, and the production build also passed. The three sorter tests live in the exact path requested by the brief.
 
 ## Checks
 
@@ -17,6 +17,8 @@ Local result: **6 PHPUnit tests (14 assertions) and 14 Playwright tests passed**
 | Static checks              | PHP_CodeSniffer PSR-12, TypeScript, ESLint, Prettier, and a production Vite build.                                               |
 
 ## Scope and limits
+
+The UI/UX refinement adds checks for at least 44px button/radio hit areas at all seven widths, 200% text sizing at 375px, landscape at 812×375, and reduced-motion progress behavior. The 15 browser tests passed after the design changes. PHP logic was unchanged in that pass; its six-test result is from the earlier implementation verification.
 
 Tests run locally against PHP 8.5.11 and MySQL 8.4.11. Browser coverage uses Chromium, not physical phones or every browser engine. Automated accessibility checks are a useful baseline, not a full manual screen-reader audit. This small application has no authentication and is not intended to be publicly exposed as a private multi-user task service.
 

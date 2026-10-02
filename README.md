@@ -144,6 +144,8 @@ Titles must be strings containing non-whitespace text, up to 255 characters. Des
 
 ## Structure and decisions
 
+The interface uses shared design tokens, readable type, and controls sized for touch. See [design decisions](docs/DESIGN.md) for how UI/UX Pro Max guidance was applied to this dashboard.
+
 ```text
 src/
   TaskSorter.php       Standalone raw PHP sorting class
@@ -208,7 +210,7 @@ The test runner starts PHP on **8001**, overrides the database name to `task_tra
 
 If PHP is not on PATH, set `PHP_BINARY` to its full executable path. To use another isolated database, set `TEST_DB_DATABASE` to a name ending in `_test`. The host, port, and credentials come from `.env` or your environment. The test runner stops its server on completion. Reports are generated under `playwright-report/`; screenshots and traces are excluded from Git.
 
-The suite covers persistence, filtering, sorting, idempotent completion, deletion, invalid input, error recovery, empty/loading feedback, keyboard cancellation, automated accessibility, and widths **320, 375, 390, 414, 768, 1024, and 1280px**. See [verification notes](docs/VERIFICATION.md) for results and limits.
+The suite covers persistence, filtering, sorting, idempotent completion, deletion, invalid input, error recovery, empty/loading feedback, keyboard cancellation, automated accessibility, and widths **320, 375, 390, 414, 768, 1024, and 1280px**. It also checks 44px control targets, 200% text sizing, landscape layout, and reduced motion. See [verification notes](docs/VERIFICATION.md) for results and limits.
 
 ## AI Disclosure
 
@@ -217,5 +219,7 @@ The suite covers persistence, filtering, sorting, idempotent completion, deletio
 **AI-assisted/generated work:** Codex assisted with requirements analysis, architecture, the initial PHP sorter/API/schema, React/TypeScript components, styling, tests, build configuration, documentation, and Git commits. The assistance covered substantially the whole initial implementation, not just isolated snippets. Earlier public-site research informed visual decisions; no proprietary company code or private infrastructure was accessed.
 
 **Review and corrections during the AI-assisted session:** The implementation was exercised against actual MySQL and reviewed with PHPUnit, PHP_CodeSniffer, TypeScript, ESLint, browser tests, and accessibility checks. Corrections included dependency compatibility, PHP namespaces and response organization, a font import, test label matching, contrast adjustments, keyboard focus after task actions, responsive control styling, and reading test database settings when PHP does not populate `$_ENV`. Validation tests check blank/invalid input; browser tests check persistence, recovery, and destructive-action confirmation. The final source was formatted and its CSS separated by responsibility for review. These actions were performed with AI assistance; they are not represented as independent human review.
+
+**UI refinement:** At the candidate's request, Codex applied the [UI/UX Pro Max skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/.claude/skills/ui-ux-pro-max/SKILL.md). This pass revised typography, semantic color tokens, dashboard hierarchy, button sizes, mobile filter layout, and notification placement. The React components and CSS changes were AI-assisted. Browser checks were extended to measure control sizes and exercise enlarged text, landscape, and reduced motion.
 
 **Candidate responsibility:** The candidate must personally read, understand, and be able to modify the submitted code. This README does not assert that the candidate has already completed that review. [The review guide](docs/REVIEW_GUIDE.md) explains the data flow and suggests concrete exercises. Before submitting, complete that review and add an honest record of any personal changes or fixes here. Do not claim work you did not perform.

@@ -110,6 +110,17 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280]) {
         .filter({ has: page.getByRole('heading', { name: title, exact: true }) });
       await expect(row).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+      for (const control of await page.getByRole('button').all()) {
+        if (!(await control.isVisible())) continue;
+        const bounds = await control.boundingBox();
+        expect(bounds!.width, await control.innerText()).toBeGreaterThanOrEqual(44);
+        expect(bounds!.height, await control.innerText()).toBeGreaterThanOrEqual(44);
+      }
+      for (const control of await page.getByRole('radio').all()) {
+        const bounds = await control.boundingBox();
+        expect(bounds!.width).toBeGreaterThanOrEqual(44);
+        expect(bounds!.height).toBeGreaterThanOrEqual(44);
+      }
       await page.getByRole('button', { name: 'New task', exact: true }).click();
       await expect(page.getByLabel('Task title')).toBeFocused();
       await row.getByRole('button', { name: `Delete ${title}`, exact: true }).click();
@@ -154,4 +165,28 @@ test('has no automated WCAG A/AA violations on the dashboard and delete dialog',
     await request.delete(`/api/tasks/${task.id}`);
     for (const id of additionalIds) await request.delete(`/api/tasks/${id}`);
   }
+});
+
+test('supports enlarged text, landscape, and reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 375, height: 900 });
+  await page.goto('/');
+  await expect(page.locator('.task-list-content')).toHaveAttribute('aria-busy', 'false');
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  await expect(page.locator('html')).toHaveCSS('font-size', '32px');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
+  await page.getByRole('button', { name: 'New task', exact: true }).click();
+  await expect(page.getByLabel('Task title')).toBeFocused();
+  await expect(page.getByLabel('Task title')).toBeInViewport();
+  expect(
+    await page
+      .locator('.progress-track > span')
+      .evaluate((element) => Number.parseFloat(getComputedStyle(element).transitionDuration)),
+  ).toBeLessThan(0.001);
+  await page.addStyleTag({ content: 'html { font-size: 100% !important; }' });
+  await expect(page.locator('html')).toHaveCSS('font-size', '16px');
+  await page.setViewportSize({ width: 812, height: 375 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(812);
+  await page.getByRole('button', { name: 'New task', exact: true }).click();
+  await expect(page.getByLabel('Task title')).toBeInViewport();
 });

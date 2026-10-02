@@ -1,4 +1,4 @@
-import { ArrowRight, Flag, LoaderCircle, Plus, Sparkles } from 'lucide-react';
+import { ArrowDownWideNarrow, ArrowRight, Flag, LoaderCircle, Plus } from 'lucide-react';
 import { useRef, useState, type FormEvent } from 'react';
 import { ApiError } from '../api';
 import type { Priority, TaskInput } from '../types';
@@ -59,8 +59,8 @@ export function TaskForm({ onCreate }: Props) {
             <Plus size={21} aria-hidden="true" />
           </span>
           <div>
-            <h2 id="new-task-heading">Make a little plan</h2>
-            <p>Big things start with a small task.</p>
+            <h2 id="new-task-heading">Create a task</h2>
+            <p>Make space for your next step.</p>
           </div>
         </div>
         <form onSubmit={submit} noValidate>
@@ -98,7 +98,7 @@ export function TaskForm({ onCreate }: Props) {
                 value={description}
                 maxLength={5000}
                 rows={4}
-                placeholder="A few details to point you in the right direction…"
+                placeholder="Add a little context…"
                 aria-invalid={Boolean(errors.description)}
                 aria-describedby={errors.description ? 'description-error' : undefined}
                 onChange={(event) => setDescription(event.target.value)}
@@ -109,7 +109,10 @@ export function TaskForm({ onCreate }: Props) {
                 </p>
               )}
             </div>
-            <fieldset className="priority-field">
+            <fieldset
+              className="priority-field"
+              aria-describedby={errors.priority ? 'priority-error' : undefined}
+            >
               <legend>Priority</legend>
               <div className="priority-options">
                 {(['low', 'medium', 'high'] as const).map((value) => (
@@ -129,7 +132,11 @@ export function TaskForm({ onCreate }: Props) {
                 ))}
               </div>
             </fieldset>
-            {errors.priority && <p className="field-error">{errors.priority}</p>}
+            {errors.priority && (
+              <p className="field-error" id="priority-error">
+                {errors.priority}
+              </p>
+            )}
             <button className="button primary add-task-button" type="submit">
               {submitting ? (
                 <LoaderCircle className="spin" size={18} aria-hidden="true" />
@@ -145,21 +152,16 @@ export function TaskForm({ onCreate }: Props) {
               {error}
             </p>
           )}
-          <p className="form-footnote">A clear task is a great first step.</p>
+          <p className="form-footnote">New tasks start as pending.</p>
         </form>
       </section>
       <div className="small-note">
         <span>
-          <Sparkles size={17} aria-hidden="true" /> A gentle reminder
+          <ArrowDownWideNarrow size={18} aria-hidden="true" /> Focus on what matters
         </span>
         <p>
-          You don’t have to do it all today.
-          <br />
-          Start with what matters most.
+          High-priority tasks come first. Tasks with the same priority are ordered oldest first.
         </p>
-        <div className="note-doodle" aria-hidden="true">
-          ↗
-        </div>
       </div>
     </aside>
   );

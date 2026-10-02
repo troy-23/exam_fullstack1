@@ -2,7 +2,6 @@ import {
   ArrowDownWideNarrow,
   Check,
   CheckCheck,
-  Circle,
   CircleAlert,
   ClipboardList,
   LoaderCircle,
@@ -64,7 +63,7 @@ export function TaskList(props: Props) {
           <h2 id="task-list-heading" tabIndex={-1}>
             Your tasks <span className="heading-count">{statistics?.total ?? '—'}</span>
           </h2>
-          <p>A little focus. A little progress.</p>
+          <p>A clear view of what’s next.</p>
         </div>
         <span className="sort-label">
           <ArrowDownWideNarrow size={15} aria-hidden="true" />
@@ -135,13 +134,6 @@ export function TaskList(props: Props) {
           <ul className="task-list">
             {tasks.map((task) => (
               <li key={task.id} className={`task-row ${task.status}`} data-testid="task-row">
-                <div className="task-status-icon">
-                  {task.status === 'completed' ? (
-                    <Check size={16} strokeWidth={3} aria-hidden="true" />
-                  ) : (
-                    <Circle size={20} strokeWidth={1.5} aria-hidden="true" />
-                  )}
-                </div>
                 <div className="task-content">
                   <div className="task-title-line">
                     <h3>{task.title}</h3>
@@ -185,12 +177,13 @@ export function TaskList(props: Props) {
                     </button>
                   )}
                   <button
-                    className="icon-button delete-button"
+                    className="delete-button"
                     aria-label={`Delete ${task.title}`}
                     disabled={busyId !== null}
                     onClick={() => onDelete(task)}
                   >
                     <Trash2 size={16} aria-hidden="true" />
+                    <span>Delete</span>
                   </button>
                 </div>
               </li>

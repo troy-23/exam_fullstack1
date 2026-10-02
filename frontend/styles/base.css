@@ -1,16 +1,44 @@
 :root {
   font-family: 'Manrope Variable', Manrope, sans-serif;
-  color: #26344a;
-  background: #f6f8fc;
+  font-size: 16px;
+  line-height: 1.6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --blue: #2058ac;
-  --blue-dark: #174789;
-  --ink: #192d4c;
-  --muted: #5c6d86;
-  --line: #e8edf4;
-  --radius: 14px;
+  color-scheme: light;
+  --blue: #2459b8;
+  --blue-dark: #19458e;
+  --blue-soft: #edf3ff;
+  --ink: #182c49;
+  --text: #33465f;
+  --muted: #5d6d83;
+  --canvas: #f5f7fb;
+  --surface: #ffffff;
+  --surface-subtle: #f8faff;
+  --line: #e1e7f0;
+  --control-border: #8594aa;
+  --success: #236749;
+  --success-soft: #edf7f1;
+  --warning: #825818;
+  --warning-soft: #fff6e4;
+  --danger: #ad3444;
+  --danger-soft: #fff0f1;
+  --focus: #2459b8;
+  --radius: 16px;
+  --radius-control: 10px;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --motion-fast: 140ms;
+  --motion-progress: 260ms;
+  color: var(--text);
+  background: var(--canvas);
 }
 * {
   box-sizing: border-box;
@@ -32,13 +60,11 @@ textarea {
 }
 button {
   cursor: pointer;
+  color: inherit;
 }
 button:disabled {
   cursor: wait;
-  opacity: 0.58;
-}
-button {
-  color: inherit;
+  opacity: 0.55;
 }
 a {
   color: inherit;
@@ -49,7 +75,7 @@ a {
   touch-action: manipulation;
 }
 :focus-visible {
-  outline: 3px solid #2874cf;
+  outline: 3px solid var(--focus);
   outline-offset: 4px;
 }
 main:focus {
@@ -61,8 +87,19 @@ h3,
 p {
   margin: 0;
 }
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
 svg {
   flex-shrink: 0;
+}
+input,
+textarea,
+button,
+[tabindex] {
+  scroll-margin-block: 24px;
 }
 .sr-only {
   position: absolute;
@@ -80,9 +117,9 @@ svg {
   top: -100px;
   left: 16px;
   padding: 12px 18px;
-  background: white;
+  background: var(--surface);
   z-index: 100;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
 }
 .skip-link:focus {
   top: 12px;
