@@ -145,8 +145,8 @@ export function TaskForm({ onCreate }: Props) {
                       onChange={() => setPriority(value)}
                     />
                     <span>
-                      <Check size={14} aria-hidden="true" />
-                      {value}
+                      <Check size={12} aria-hidden="true" />
+                      <span className="priority-label">{value}</span>
                     </span>
                   </label>
                 ))}

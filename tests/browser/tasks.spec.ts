@@ -91,7 +91,7 @@ test('shows loading feedback then an intentional empty state', async ({ page }) 
   await expect(page.getByLabel('Task title')).toBeFocused();
 });
 
-for (const width of [320, 375, 390, 414, 768, 1024, 1280]) {
+for (const width of [280, 320, 375, 390, 414, 440, 768, 1024, 1280]) {
   test(`fits and remains operable at ${width}px`, async ({ page, request }) => {
     const title = `Responsive ${width} ${'longunbrokentitle'.repeat(10)}`;
     const response = await request.post('/api/tasks', {
@@ -117,9 +117,25 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280]) {
         expect(bounds!.height, await control.innerText()).toBeGreaterThanOrEqual(44);
       }
       for (const control of await page.getByRole('radio').all()) {
+        await control.check();
         const bounds = await control.boundingBox();
         expect(bounds!.width).toBeGreaterThanOrEqual(44);
         expect(bounds!.height).toBeGreaterThanOrEqual(44);
+        const label = await control.locator('..').locator('.priority-label').boundingBox();
+        expect(
+          Math.abs(label!.x + label!.width / 2 - (bounds!.x + bounds!.width / 2)),
+        ).toBeLessThan(1);
+        expect(
+          Math.abs(label!.y + label!.height / 2 - (bounds!.y + bounds!.height / 2)),
+        ).toBeLessThan(1);
+      }
+      if (width >= 320 && width < 768) {
+        const values = await page.locator('.stat-value').all();
+        for (const index of [0, 2]) {
+          const first = await values[index].boundingBox();
+          const second = await values[index + 1].boundingBox();
+          expect(Math.abs(first!.y - second!.y)).toBeLessThan(1);
+        }
       }
       await page.getByRole('button', { name: 'New task', exact: true }).click();
       await expect(page.getByLabel('Task title')).toBeFocused();

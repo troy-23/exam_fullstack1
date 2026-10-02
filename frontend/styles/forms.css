@@ -76,7 +76,7 @@ textarea:focus {
 .priority-option {
   cursor: pointer;
   position: relative;
-  flex: 1 1 4.75rem;
+  flex: 1 1 3.75rem;
   min-width: 0;
 }
 .priority-option input {
@@ -90,10 +90,10 @@ textarea:focus {
   z-index: 1;
 }
 .priority-option > span {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
   border: 1px solid var(--control-border);
   min-height: 44px;
   padding: 10px 4px;
@@ -111,6 +111,9 @@ textarea:focus {
   outline-offset: 3px;
 }
 .priority-option svg {
+  position: absolute;
+  top: 2px;
+  right: 2px;
   visibility: hidden;
 }
 .priority-option input:checked + span > svg {

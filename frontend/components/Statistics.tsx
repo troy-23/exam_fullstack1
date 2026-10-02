@@ -15,24 +15,28 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
       {cards.map(({ label, value }) => (
         <div className="stat-card" key={label}>
           <span className="stat-top">{label}</span>
-          <strong className="stat-value">{value ?? '—'}</strong>
+          <div className="stat-details">
+            <strong className="stat-value">{value ?? '—'}</strong>
+          </div>
         </div>
       ))}
       <div className="stat-card">
         <span className="stat-top">Completion rate</span>
-        <strong className="stat-value">
-          {statistics ? percentage : '—'}
-          <span>%</span>
-        </strong>
-        <div
-          className="progress-track"
-          role="progressbar"
-          aria-label="Tasks completed"
-          aria-valuenow={statistics ? percentage : undefined}
-          aria-valuemin={0}
-          aria-valuemax={100}
-        >
-          <span style={{ transform: `scaleX(${percentage / 100})` }} />
+        <div className="stat-details">
+          <strong className="stat-value">
+            {statistics ? percentage : '—'}
+            <span>%</span>
+          </strong>
+          <div
+            className="progress-track"
+            role="progressbar"
+            aria-label="Tasks completed"
+            aria-valuenow={statistics ? percentage : undefined}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <span style={{ transform: `scaleX(${percentage / 100})` }} />
+          </div>
         </div>
       </div>
     </section>
