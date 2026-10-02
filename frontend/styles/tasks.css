@@ -257,7 +257,7 @@
     padding-inline: 24px;
   }
 }
-@container (max-width: 400px) {
+@container (max-width: 480px) {
   .filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.75rem), 1fr));
