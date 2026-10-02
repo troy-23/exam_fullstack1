@@ -1,21 +1,19 @@
 # Simple Task Tracker
 
-Responsive task tracker gamit ang **React, TypeScript, Vanilla PHP, at MySQL**. May create, priority sorting, status filters, complete/delete actions, at basic statistics.
+## Setup sa ibang device
 
-## Requirements
+Kailangan: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL 8.0+, at Node.js 22.12+. Ilagay ang command-line tools sa PATH at simulan ang MySQL server.
 
-PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL 8.0+, at Node.js 22.12+.
-
-## Local setup
-
-1. I-install ang dependencies:
+1. I-clone ang repository at i-install ang dependencies:
 
    ```sh
+   git clone https://github.com/troy-23/exam_fullstack1.git
+   cd exam_fullstack1
    composer install
    npm ci
    ```
 
-2. Sa MySQL administrator connection, gumawa ng database at user:
+2. Sa MySQL administrator connection (`mysql -u root -p` o database GUI), patakbuhin ang SQL sa ibaba. Palitan ang `your-password` ng sariling password:
 
    ```sql
    CREATE DATABASE task_tracker CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -24,9 +22,15 @@ PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL
        ON task_tracker.* TO 'task_tracker'@'127.0.0.1';
    ```
 
-3. Kopyahin ang `.env.example` bilang `.env` (`Copy-Item .env.example .env` sa PowerShell). Itakda ang `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, at `DB_PASSWORD` ayon sa ginawa mong MySQL setup. Default port: 3306. Huwag isama ang `.env` sa Git.
+3. Gumawa ng local configuration:
 
-4. Gumawa ng table, i-build, at patakbuhin:
+   ```sh
+   php -r "copy('.env.example', '.env');"
+   ```
+
+   Sa `.env`, itakda ang `DB_HOST=127.0.0.1`, `DB_PORT=3306`, `DB_DATABASE=task_tracker`, `DB_USERNAME=task_tracker`, at ang napili mong `DB_PASSWORD`. Baguhin ang port kung iba ang MySQL setup mo. Hindi kasama sa Git ang `.env`.
+
+4. Gumawa ng table, i-build ang frontend, at patakbuhin ang app:
 
    ```sh
    composer db:setup
@@ -34,42 +38,12 @@ PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL
    composer serve
    ```
 
-   Buksan ang **http://127.0.0.1:8000**. Optional: `composer db:seed` para sa sample tasks kapag walang laman ang database.
-
-Para sa frontend development, patakbuhin din ang `npm run dev` at buksan ang http://127.0.0.1:5173/build/. Kailangang tumatakbo ang PHP server. Kung hindi makita ang PHP/Composer, idagdag ang mga ito sa PATH.
-
-## API
-
-| Method | Endpoint                    | Result                                 |
-| ------ | --------------------------- | -------------------------------------- |
-| GET    | `/api/tasks`                | 200; sorted tasks at global statistics |
-| GET    | `/api/tasks?status=pending` | 200; puwede rin ang `completed`        |
-| POST   | `/api/tasks`                | 201; bagong pending task               |
-| PATCH  | `/api/tasks/{id}/complete`  | 200; mark completed                    |
-| DELETE | `/api/tasks/{id}`           | 200; delete task                       |
-
-POST body: `{"title":"Review requirements","description":"Optional notes","priority":"high"}`. Gumamit ng `Content-Type: application/json`.
-
-Required ang nonblank title (max 255 characters). Optional ang description (max 5,000); default priority: medium. Invalid input: **400**; missing task/route: **404**; unsupported method: **405**.
-
-## Tests
-
-```sh
-composer test
-composer lint
-npm run lint
-npm run format:check
-npm run build
-```
-
-May **3 sorter tests** sa `tests/TaskSorterTest.php` para sa priority, date order, at empty input/ties; may 3 karagdagang validation tests.
-
-Para sa API/browser tests, gumawa ng `task_tracker_test` database na may parehong user permissions. Pagkatapos: `npx playwright install chromium`, `npm run build`, at `npm run test:e2e`. Gumagamit ito ng hiwalay na database at PHP server sa port 8001. Kung wala ang PHP sa PATH, itakda ang `PHP_BINARY` sa executable path.
+   Buksan ang **http://127.0.0.1:8000**. Panatilihing bukas ang terminal habang ginagamit ang app.
 
 ## AI Disclosure
 
 - **Tool:** OpenAI Codex.
 - **Saklaw:** Malaking bahagi ng initial PHP sorter/API/schema, React UI/CSS, tests, configuration, at documentation ay generated o assisted ng AI.
-- **Review at fixes:** Sa AI-assisted development, inayos ang dependency compatibility, validation, contrast, keyboard focus, responsive layout, at test environment. Sinuri gamit ang PHPUnit, PSR-12, TypeScript, lint, at API/browser tests. Pinasimple rin ang UI at documentation bago submission.
+- **Review at fixes:** Sa AI-assisted development, inayos ang dependency compatibility, validation, contrast, keyboard focus, responsive layout, at test environment. Sinuri gamit ang PHPUnit, PSR-12, TypeScript, lint, at API/browser tests. Pinasimple rin ang UI at documentation.
 
-Ang mga check na ito ay AI-assisted. Kailangang personal na aralin at maipaliwanag ng candidate ang code; walang personal review na inaangking tapos na.
+Ang mga review/checks na ito ay AI-assisted; walang personal review ng candidate na inaangking tapos na.
