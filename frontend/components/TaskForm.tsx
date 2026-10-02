@@ -1,4 +1,4 @@
-import { ArrowDownWideNarrow, ArrowRight, Flag, LoaderCircle, Plus } from 'lucide-react';
+import { Flag, LoaderCircle, Plus } from 'lucide-react';
 import { useRef, useState, type FormEvent } from 'react';
 import { ApiError } from '../api';
 import type { Priority, TaskInput } from '../types';
@@ -24,7 +24,7 @@ export function TaskForm({ onCreate }: Props) {
     setErrors({});
 
     if (!title.trim()) {
-      setErrors({ title: 'Give your task a title.' });
+      setErrors({ title: 'Title is required.' });
       titleRef.current?.focus();
       return;
     }
@@ -55,13 +55,7 @@ export function TaskForm({ onCreate }: Props) {
     <aside className="form-column" aria-labelledby="new-task-heading">
       <section className="panel task-form-panel" id="new-task">
         <div className="form-heading">
-          <span className="form-icon">
-            <Plus size={21} aria-hidden="true" />
-          </span>
-          <div>
-            <h2 id="new-task-heading">Create a task</h2>
-            <p>Make space for your next step.</p>
-          </div>
+          <h2 id="new-task-heading">Add task</h2>
         </div>
         <form onSubmit={submit} noValidate>
           <fieldset disabled={submitting} className="form-fields">
@@ -76,7 +70,7 @@ export function TaskForm({ onCreate }: Props) {
                 value={title}
                 maxLength={255}
                 required
-                placeholder="What needs to get done?"
+                placeholder="Task title"
                 autoComplete="off"
                 aria-invalid={Boolean(errors.title)}
                 aria-describedby={errors.title ? 'title-error' : undefined}
@@ -98,7 +92,7 @@ export function TaskForm({ onCreate }: Props) {
                 value={description}
                 maxLength={5000}
                 rows={4}
-                placeholder="Add a little context…"
+                placeholder="Add details"
                 aria-invalid={Boolean(errors.description)}
                 aria-describedby={errors.description ? 'description-error' : undefined}
                 onChange={(event) => setDescription(event.target.value)}
@@ -144,7 +138,6 @@ export function TaskForm({ onCreate }: Props) {
                 <Plus size={18} aria-hidden="true" />
               )}
               {submitting ? 'Adding task…' : 'Add task'}
-              <ArrowRight className="button-arrow" size={17} aria-hidden="true" />
             </button>
           </fieldset>
           {error && (
@@ -152,17 +145,8 @@ export function TaskForm({ onCreate }: Props) {
               {error}
             </p>
           )}
-          <p className="form-footnote">New tasks start as pending.</p>
         </form>
       </section>
-      <div className="small-note">
-        <span>
-          <ArrowDownWideNarrow size={18} aria-hidden="true" /> Focus on what matters
-        </span>
-        <p>
-          High-priority tasks come first. Tasks with the same priority are ordered oldest first.
-        </p>
-      </div>
     </aside>
   );
 }

@@ -53,7 +53,7 @@ export function DeleteDialog({ task, deleting, error, onCancel, onConfirm }: Pro
       <div className="delete-dialog-icon">
         <Trash2 size={24} aria-hidden="true" />
       </div>
-      <h2 id="delete-heading">Let this task go?</h2>
+      <h2 id="delete-heading">Delete task?</h2>
       <p id="delete-description">
         “<strong>{task.title}</strong>” will be permanently deleted. This can’t be undone.
       </p>
@@ -64,7 +64,7 @@ export function DeleteDialog({ task, deleting, error, onCancel, onConfirm }: Pro
       )}
       <div className="dialog-actions">
         <button ref={cancelRef} className="button secondary" onClick={onCancel} disabled={deleting}>
-          Keep task
+          Cancel
         </button>
         <button className="button danger" onClick={onConfirm} disabled={deleting}>
           {deleting && <LoaderCircle size={16} className="spin" aria-hidden="true" />}

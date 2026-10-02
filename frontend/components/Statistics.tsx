@@ -1,4 +1,3 @@
-import { ArrowUpRight, CheckCheck, CircleDashed, Layers3 } from 'lucide-react';
 import type { Statistics as TaskStatistics } from '../types';
 
 export function Statistics({ statistics }: { statistics: TaskStatistics | undefined }) {
@@ -6,48 +5,21 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
     ? Math.round((statistics.completed / statistics.total) * 100)
     : 0;
   const cards = [
-    {
-      label: 'Total tasks',
-      value: statistics?.total,
-      icon: Layers3,
-      tone: 'blue',
-      detail: 'In your workspace',
-    },
-    {
-      label: 'Pending',
-      value: statistics?.pending,
-      icon: CircleDashed,
-      tone: 'amber',
-      detail: 'Ready when you are',
-    },
-    {
-      label: 'Completed',
-      value: statistics?.completed,
-      icon: CheckCheck,
-      tone: 'green',
-      detail: 'One step further',
-    },
+    { label: 'Total tasks', value: statistics?.total },
+    { label: 'Pending', value: statistics?.pending },
+    { label: 'Completed', value: statistics?.completed },
   ];
 
   return (
     <section className="statistics" aria-label="Task statistics">
-      {cards.map(({ label, value, icon: Icon, tone, detail }) => (
+      {cards.map(({ label, value }) => (
         <div className="stat-card" key={label}>
-          <div className="stat-top">
-            <span>{label}</span>
-            <span className={`stat-icon ${tone}`}>
-              <Icon size={18} aria-hidden="true" />
-            </span>
-          </div>
+          <span className="stat-top">{label}</span>
           <strong className="stat-value">{value ?? '—'}</strong>
-          <span className="stat-detail">{detail}</span>
         </div>
       ))}
       <div className="stat-card progress-card">
-        <div className="stat-top">
-          <span>Completion rate</span>
-          <ArrowUpRight size={19} aria-hidden="true" />
-        </div>
+        <span className="stat-top">Completion rate</span>
         <strong className="stat-value">
           {statistics ? percentage : '—'}
           <span>%</span>
@@ -62,11 +34,6 @@ export function Statistics({ statistics }: { statistics: TaskStatistics | undefi
         >
           <span style={{ transform: `scaleX(${percentage / 100})` }} />
         </div>
-        <span className="stat-detail">
-          {statistics
-            ? `${statistics.completed} of ${statistics.total} tasks done`
-            : 'Loading your progress…'}
-        </span>
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ final class TaskValidator
         $priority = $input['priority'] ?? 'medium';
 
         if (!is_string($title) || preg_match('/\S/u', $title) !== 1) {
-            $errors['title'] = 'Give your task a title.';
+            $errors['title'] = 'Title is required.';
         } elseif (mb_strlen(trim($title)) > 255) {
             $errors['title'] = 'Keep the title to 255 characters or fewer.';
         }

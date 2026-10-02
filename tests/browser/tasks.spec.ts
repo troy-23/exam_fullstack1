@@ -12,7 +12,7 @@ test('creates, persists after reload, filters, completes, and deletes through th
   try {
     await page.goto('/');
     await page.getByRole('button', { name: 'Add task', exact: true }).click();
-    await expect(page.getByText('Give your task a title.')).toBeVisible();
+    await expect(page.getByText('Title is required.')).toBeVisible();
     await expect(page.getByLabel('Task title')).toBeFocused();
     await page.getByLabel('Task title').fill(title);
     await page.getByLabel('Description').fill('Keep the important things in sight.');
@@ -35,7 +35,7 @@ test('creates, persists after reload, filters, completes, and deletes through th
     await expect(row.getByText('Completed', { exact: true })).toBeVisible();
     await row.getByRole('button', { name: `Delete ${title}`, exact: true }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Keep task' })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Cancel' })).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).not.toBeVisible();
     await expect(row.getByRole('button', { name: `Delete ${title}`, exact: true })).toBeFocused();
@@ -61,14 +61,14 @@ test('keeps form input after a failed save and can recover from a failed list re
     }),
   );
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Let’s try that again' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Unable to load tasks' })).toBeVisible();
   await page.getByLabel('Task title').fill('Keep this draft');
   await page.getByRole('button', { name: 'Add task', exact: true }).click();
   await expect(page.getByLabel('Task title')).toHaveValue('Keep this draft');
   await expect(page.locator('.form-error')).toBeVisible();
   await page.unroute('**/api/tasks**');
   await page.getByRole('button', { name: 'Retry', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Let’s try that again' })).not.toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Unable to load tasks' })).not.toBeVisible();
   await expect(page.locator('.task-list-content')).toHaveAttribute('aria-busy', 'false');
 });
 
@@ -84,9 +84,7 @@ test('shows loading feedback then an intentional empty state', async ({ page }) 
   await page.goto('/');
   await expect(page.getByRole('status', { name: 'Loading tasks' })).toBeVisible();
   release();
-  await expect(
-    page.getByRole('heading', { name: 'A fresh page. A little possibility.' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No tasks yet' })).toBeVisible();
   await page.getByRole('button', { name: 'Create a task', exact: true }).click();
   await expect(page.getByLabel('Task title')).toBeFocused();
 });
@@ -128,7 +126,7 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280]) {
       const dialog = await page.getByRole('dialog').boundingBox();
       expect(dialog!.x).toBeGreaterThanOrEqual(0);
       expect(dialog!.x + dialog!.width).toBeLessThanOrEqual(width);
-      await page.getByRole('button', { name: 'Keep task' }).click();
+      await page.getByRole('button', { name: 'Cancel' }).click();
       await page.screenshot({ path: `artifacts/responsive-${width}.png`, fullPage: true });
     } finally {
       await request.delete(`/api/tasks/${task.id}`);

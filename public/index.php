@@ -71,9 +71,11 @@ try {
 
         if ($completion && $method === 'PATCH') {
             $task = (new TaskRepository(Database::connect()))->complete($id);
-            $task === null
-                ? JsonResponse::send(['message' => 'Task not found.'], 404)
-                : JsonResponse::send(['data' => $task]);
+            if ($task === null) {
+                JsonResponse::send(['message' => 'Task not found.'], 404);
+            }
+
+            JsonResponse::send(['data' => $task]);
         }
 
         if (!$completion && $method === 'DELETE') {

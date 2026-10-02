@@ -48,13 +48,10 @@ export function TaskList(props: Props) {
   } = props;
   const emptyCopy =
     filter === 'completed'
-      ? ['Good things are in progress', 'Complete your first task and it will appear here.']
+      ? ['No completed tasks', 'Completed tasks will appear here.']
       : filter === 'pending' && (statistics?.total ?? 0) > 0
-        ? ['All caught up. Nicely done!', 'Take a breath. You’ve earned a little space.']
-        : [
-            'A fresh page. A little possibility.',
-            'Add your first task and give your day some direction.',
-          ];
+        ? ['No pending tasks', 'All tasks are completed.']
+        : ['No tasks yet', 'Add a task to get started.'];
 
   return (
     <section className="panel task-list-panel" aria-labelledby="task-list-heading">
@@ -63,7 +60,6 @@ export function TaskList(props: Props) {
           <h2 id="task-list-heading" tabIndex={-1}>
             Your tasks <span className="heading-count">{statistics?.total ?? '—'}</span>
           </h2>
-          <p>A clear view of what’s next.</p>
         </div>
         <span className="sort-label">
           <ArrowDownWideNarrow size={15} aria-hidden="true" />
@@ -105,7 +101,7 @@ export function TaskList(props: Props) {
             <div className="empty-icon">
               <CircleAlert size={28} aria-hidden="true" />
             </div>
-            <h3>Let’s try that again</h3>
+            <h3>Unable to load tasks</h3>
             <p>{error}</p>
             <button className="button secondary" onClick={onRetry}>
               <RotateCw size={16} aria-hidden="true" />
@@ -194,9 +190,9 @@ export function TaskList(props: Props) {
       <div className="list-footer">
         <span>
           {loading
-            ? 'Getting things in order…'
+            ? 'Loading tasks…'
             : error
-              ? 'Your tasks will be here when the connection returns.'
+              ? 'Check your connection and retry.'
               : `Showing ${tasks.length} ${filter === 'all' ? '' : `${filter} `}task${tasks.length === 1 ? '' : 's'}`}
         </span>
         <span>High → low · Oldest first</span>

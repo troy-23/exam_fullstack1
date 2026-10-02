@@ -69,21 +69,6 @@
   height: 12px;
   width: 50%;
 }
-.page-footer {
-  margin-top: 40px;
-  border-top: 1px solid var(--line);
-  padding-top: 20px;
-  padding-bottom: env(safe-area-inset-bottom);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-2);
-  color: var(--muted);
-  font-size: var(--text-xs);
-}
-.page-footer > span:first-child {
-  font-weight: 700;
-}
 .action-error {
   display: flex;
   align-items: center;
