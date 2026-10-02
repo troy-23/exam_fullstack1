@@ -40,10 +40,12 @@ Requirements: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`)
 
    Open **http://127.0.0.1:8000**. Keep the terminal open while using the app.
 
+Optional: after `composer db:setup`, run `composer db:seed` to add the 12 sample tasks. Existing titles are skipped.
+
 ## AI Disclosure
 
 - **Tool:** OpenAI Codex.
-- **Scope:** AI generated or assisted with much of the initial PHP sorter/API/database schema, React UI/CSS, tests, configuration, and documentation.
+- **Scope:** AI generated or assisted with much of the PHP sorter/API, database schema and seed scripts, React UI/CSS, tests, configuration, and documentation.
 - **Reviews and fixes:** AI-assisted work included fixes for dependency compatibility, validation, contrast, keyboard focus, responsive layouts, and the test environment. Checks included PHPUnit, PSR-12, TypeScript, linting, and API/browser tests. The UI and documentation were also simplified.
 
 These reviews and checks were AI-assisted. No completed personal code review by the candidate is claimed.
