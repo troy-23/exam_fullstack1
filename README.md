@@ -1,10 +1,10 @@
 # Simple Task Tracker
 
-## Setup sa ibang device
+## Setup on another device
 
-Kailangan: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL 8.0+, at Node.js 22.12+. Ilagay ang command-line tools sa PATH at simulan ang MySQL server.
+Requirements: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), Composer 2, MySQL 8.0+, and Node.js 22.12+. Add the command-line tools to PATH and start the MySQL server.
 
-1. I-clone ang repository at i-install ang dependencies:
+1. Clone the repository and install dependencies:
 
    ```sh
    git clone https://github.com/troy-23/exam_fullstack1.git
@@ -13,7 +13,7 @@ Kailangan: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), C
    npm ci
    ```
 
-2. Sa MySQL administrator connection (`mysql -u root -p` o database GUI), patakbuhin ang SQL sa ibaba. Palitan ang `your-password` ng sariling password:
+2. Connect to MySQL as an administrator (`mysql -u root -p` or a database GUI) and run the SQL below. Replace `your-password` with your own password:
 
    ```sql
    CREATE DATABASE task_tracker CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -22,15 +22,15 @@ Kailangan: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), C
        ON task_tracker.* TO 'task_tracker'@'127.0.0.1';
    ```
 
-3. Gumawa ng local configuration:
+3. Create the local configuration:
 
    ```sh
    php -r "copy('.env.example', '.env');"
    ```
 
-   Sa `.env`, itakda ang `DB_HOST=127.0.0.1`, `DB_PORT=3306`, `DB_DATABASE=task_tracker`, `DB_USERNAME=task_tracker`, at ang napili mong `DB_PASSWORD`. Baguhin ang port kung iba ang MySQL setup mo. Hindi kasama sa Git ang `.env`.
+   In `.env`, set `DB_HOST=127.0.0.1`, `DB_PORT=3306`, `DB_DATABASE=task_tracker`, `DB_USERNAME=task_tracker`, and your chosen `DB_PASSWORD`. Adjust the port if your MySQL setup uses a different one. The `.env` file is excluded from Git.
 
-4. Gumawa ng table, i-build ang frontend, at patakbuhin ang app:
+4. Create the table, build the frontend, and start the app:
 
    ```sh
    composer db:setup
@@ -38,12 +38,12 @@ Kailangan: Git, PHP 8.3+ (`pdo_mysql`, `mbstring`, `dom`, `xml`, `xmlwriter`), C
    composer serve
    ```
 
-   Buksan ang **http://127.0.0.1:8000**. Panatilihing bukas ang terminal habang ginagamit ang app.
+   Open **http://127.0.0.1:8000**. Keep the terminal open while using the app.
 
 ## AI Disclosure
 
 - **Tool:** OpenAI Codex.
-- **Saklaw:** Malaking bahagi ng initial PHP sorter/API/schema, React UI/CSS, tests, configuration, at documentation ay generated o assisted ng AI.
-- **Review at fixes:** Sa AI-assisted development, inayos ang dependency compatibility, validation, contrast, keyboard focus, responsive layout, at test environment. Sinuri gamit ang PHPUnit, PSR-12, TypeScript, lint, at API/browser tests. Pinasimple rin ang UI at documentation.
+- **Scope:** AI generated or assisted with much of the initial PHP sorter/API/database schema, React UI/CSS, tests, configuration, and documentation.
+- **Reviews and fixes:** AI-assisted work included fixes for dependency compatibility, validation, contrast, keyboard focus, responsive layouts, and the test environment. Checks included PHPUnit, PSR-12, TypeScript, linting, and API/browser tests. The UI and documentation were also simplified.
 
-Ang mga review/checks na ito ay AI-assisted; walang personal review ng candidate na inaangking tapos na.
+These reviews and checks were AI-assisted. No completed personal code review by the candidate is claimed.
